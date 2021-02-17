@@ -2,4 +2,7 @@
     <string name="app_name">PromobitDemoApp1</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="api_key">J6AcBenupmA5W5MqJDUe85ut8m77Hg0z</string>
+    <string name="dummy_second_text">Dummy second text</string>
+    <string name="item_title">Item Title</string>
 </resources>

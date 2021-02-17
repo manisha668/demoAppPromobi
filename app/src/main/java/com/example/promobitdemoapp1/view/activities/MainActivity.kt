@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import com.example.promobitdemoapp1.App
 import com.example.promobitdemoapp1.R
 import com.example.promobitdemoapp1.network.api.NYTServiceCallInterface
 import com.example.promobitdemoapp1.view.fragments.BaseFragment
@@ -11,27 +12,32 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Retrofit
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+     @Inject
+    lateinit var retrofit:Retrofit
+
     var fragment = BaseFragment()
-    private val serviceCall by lazy {
-        NYTServiceCallInterface.create()
-    }
+
     private var disposable : Disposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        App().getAPIComponent().inject(this)
+
 //        var fragmentTansaction = supportFragmentManager.beginTransaction()
 //        fragmentTansaction.add(R.id.main_fragment_container, fragment)
 //        fragmentTansaction.commit()
-       callApi()
-
-
+      callApi()
     }
 
     fun callApi(){
-       disposable = serviceCall.getArchieveData(2019,1)
+      val serviceCall = retrofit.create(NYTServiceCallInterface::class.java)
+       disposable = serviceCall.getArchieveData(2019,1, resources.getString(R.string.api_key))
            .subscribeOn(Schedulers.io())
            .observeOn(AndroidSchedulers.mainThread())
            .subscribe (
