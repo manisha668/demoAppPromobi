@@ -3,10 +3,12 @@ package com.example.promobitdemoapp1.view.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import com.example.promobitdemoapp1.App
 import com.example.promobitdemoapp1.R
 import com.example.promobitdemoapp1.network.api.NYTServiceCallInterface
+import com.example.promobitdemoapp1.utils.constants.AppConstants
 import com.example.promobitdemoapp1.view.fragments.BaseFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -16,41 +18,31 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-
-     @Inject
-    lateinit var retrofit:Retrofit
-
+    @Inject
+    lateinit var retrofit: Retrofit
     var fragment = BaseFragment()
 
-    private var disposable : Disposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         App().getAPIComponent().inject(this)
-
-//        var fragmentTansaction = supportFragmentManager.beginTransaction()
-//        fragmentTansaction.add(R.id.main_fragment_container, fragment)
-//        fragmentTansaction.commit()
-      callApi()
     }
 
-    fun callApi(){
-      val serviceCall = retrofit.create(NYTServiceCallInterface::class.java)
-       disposable = serviceCall.getArchieveData(2019,1, resources.getString(R.string.api_key))
-           .subscribeOn(Schedulers.io())
-           .observeOn(AndroidSchedulers.mainThread())
-           .subscribe (
-               {result ->  result.copyright.forEach {
-                   textview_example.text = it.toString()
-               }
-               Log.d(this.localClassName, "Result fo API = $result")},
-               { error("Error occured while calling api")}
-               )
-    }
+    override fun onResume() {
+        super.onResume()
+        val bundle = Bundle()
+        val yearString = textview_year.text
+        val monthString = textview_month.text
 
-    override fun onPause() {
-        super.onPause()
-        disposable?.dispose()
+        button_view.setOnClickListener(View.OnClickListener {
+            bundle.putString(AppConstants.YEAR_DATA, yearString.toString())
+            bundle.putString(AppConstants.MONTH_DATA, monthString.toString())
+            Log.d(this.localClassName, " year is : $yearString, month is : $monthString")
+            fragment.arguments = bundle
+            val fragmentTansaction = supportFragmentManager.beginTransaction()
+            fragmentTansaction.replace(R.id.main_fragment_container, fragment)
+            fragmentTansaction.commit()
+        })
     }
 }

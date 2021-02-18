@@ -5,4 +5,7 @@
     <string name="api_key">J6AcBenupmA5W5MqJDUe85ut8m77Hg0z</string>
     <string name="dummy_second_text">Dummy second text</string>
     <string name="item_title">Item Title</string>
+    <string name="get_data">Get Data</string>
+    <string name="enter_month">Enter month</string>
+    <string name="enter_year">Enter year</string>
 </resources>
