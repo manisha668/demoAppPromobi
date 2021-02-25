@@ -1,5 +1,6 @@
 package com.example.promobitdemoapp1.view.activities
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity() : AppCompatActivity() {
     @Inject
     lateinit var retrofit: Retrofit
     var fragment = BaseFragment()
@@ -26,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        App().getAPIComponent().inject(this)
     }
 
     override fun onResume() {
